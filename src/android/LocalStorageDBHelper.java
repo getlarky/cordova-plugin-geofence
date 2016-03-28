@@ -49,7 +49,7 @@ public class LocalStorageDBHelper extends SQLiteOpenHelper {
      * @return the instance of LocalStorage of the application or a new one if
      *         it has not been created before.
      */
-    public static LocalStorageDBHelper getInstance(Context ctx) {
+    public static synchronized LocalStorageDBHelper getInstance(Context ctx) {
         if (mInstance == null) {
             mInstance = new LocalStorageDBHelper(ctx);
         }

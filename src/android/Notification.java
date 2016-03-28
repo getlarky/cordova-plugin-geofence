@@ -18,6 +18,7 @@ public class Notification {
     @Expose public String smallIcon = "";
     @Expose public Object data;
     @Expose public boolean openAppOnClick;
+    @Expose public boolean autoCancel = true;
 
     public void setContext(Context context) {
         this.context = context;
@@ -26,6 +27,10 @@ public class Notification {
 
     public String getText() {
         return this.text;
+    }
+
+    public boolean getAutoCancel() {
+        return this.autoCancel;
     }
 
     public String getTitle() {
