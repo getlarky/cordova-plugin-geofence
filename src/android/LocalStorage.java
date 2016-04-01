@@ -85,7 +85,7 @@ public class LocalStorage {
                 database.insert(LocalStorageDBHelper.LOCALSTORAGE_TABLE_NAME,
                         null, values);
             }
-            database.close();
+            // database.close();
         }
     }
 
@@ -100,7 +100,7 @@ public class LocalStorage {
             database.delete(LocalStorageDBHelper.LOCALSTORAGE_TABLE_NAME,
                     LocalStorageDBHelper.LOCALSTORAGE_ID + "='" + key + "'",
                     null);
-            database.close();
+            // database.close();
         }
     }
 
