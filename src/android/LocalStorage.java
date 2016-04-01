@@ -35,7 +35,7 @@ public class LocalStorage {
             results.add(cursor.getString(1));
         }
         cursor.close();
-        database.close();
+        // database.close();
         return results;
     }
 
@@ -58,7 +58,7 @@ public class LocalStorage {
                 value = cursor.getString(1);
             }
             cursor.close();
-            database.close();
+            // database.close();
         }
         return value;
     }
