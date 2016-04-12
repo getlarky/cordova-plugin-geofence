@@ -111,6 +111,6 @@ public class LocalStorage {
         database = localStorageDBHelper.getWritableDatabase();
         database.delete(LocalStorageDBHelper.LOCALSTORAGE_TABLE_NAME, null,
                 null);
-        database.close();
+        // database.close();
     }
 }
