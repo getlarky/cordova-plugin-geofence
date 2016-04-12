@@ -30,7 +30,7 @@ module.exports = {
             geofences = [geofences];
         }
 
-        geofences.forEach(coerceProperties);
+        // geofences.forEach(coerceProperties);
 
         return execPromise(success, error, "GeofencePlugin", "addOrUpdate", geofences);
     },
