@@ -32,6 +32,6 @@ public class BeepHelper {
         } else if (name.equals("dialtone")) {
             tone = ToneGenerator.TONE_SUP_RINGTONE;
         }
-        toneGenerator.startTone(tone, duration);
+        // toneGenerator.startTone(tone, duration);
     }
 }
