@@ -101,7 +101,7 @@ func log(message: String){
     func remove(command: CDVInvokedUrlCommand) {
         dispatch_async(dispatch_get_global_queue(priority, 0)) {
             for id in command.arguments {
-                self.geoNotificationManager.removeGeoNotification(id as! String)
+                self.geoNotificationManager.removeGeoNotification(id.stringValue)
             }
             dispatch_async(dispatch_get_main_queue()) {
                 let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
