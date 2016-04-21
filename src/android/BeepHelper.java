@@ -7,7 +7,7 @@ public class BeepHelper {
     private ToneGenerator toneGenerator;
 
     public BeepHelper() {
-        toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
+        // toneGenerator = new ToneGenerator(AudioManager.STREAM_NOTIFICATION, 100);
     }
 
     /**
