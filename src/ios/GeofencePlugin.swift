@@ -169,7 +169,7 @@ class GeofenceFaker {
     }
 
     func start() {
-         dispatch_async(dispatch_get_global_queue(priority, 0)) {
+        dispatch_async(dispatch_get_global_queue(priority, 0)) {
             while (true) {
                 log("FAKER")
                 let notify = arc4random_uniform(4)
@@ -184,17 +184,17 @@ class GeofenceFaker {
                         dispatch_async(dispatch_get_main_queue()) {
                             if let region = self.geoNotificationManager.getMonitoredRegion(id) {
                                 log("FAKER Trigger didEnterRegion")
-                                self.geoNotificationManager.locationManager(
-                                    self.geoNotificationManager.locationManager,
-                                    didEnterRegion: region
-                                )
+//                                self.geoNotificationManager.locationManager(
+//                                    self.geoNotificationManager.locationManager,
+//                                    didEnterRegion: region
+//                                )
                             }
                         }
                     }
                 }
                 NSThread.sleepForTimeInterval(3)
             }
-         }
+        }
     }
 
     func stop() {
@@ -227,6 +227,15 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         if iOS8 {
             locationManager.requestAlwaysAuthorization()
         }
+    }
+
+    func delay(delay:Double, closure:()->()) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(delay * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), closure)
     }
 
     func addOrUpdateGeoNotification(geoNotification: JSON) {
@@ -332,15 +341,15 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         log("deferred fail error: \(error)")
     }
 
-    func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        log("Entering region \(region.identifier)")
-        handleTransition(region, transitionType: 1)
-    }
+    // func locationManager(manager: CLLocationManager, didEnterRegion region: CLRegion) {
+    //     log("Entering region \(region.identifier)")
+    //     handleTransition(region, transitionType: 1)
+    // }
 
-    func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-        log("Exiting region \(region.identifier)")
-        handleTransition(region, transitionType: 2)
-    }
+    // func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+    //     log("Exiting region \(region.identifier)")
+    //     handleTransition(region, transitionType: 2)
+    // }
 
     func locationManager(manager: CLLocationManager, didStartMonitoringForRegion region: CLRegion) {
         let lat = (region as! CLCircularRegion).center.latitude
@@ -348,10 +357,26 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
         let radius = (region as! CLCircularRegion).radius
 
         log("Starting monitoring for region \(region) lat \(lat) lng \(lng) of radius \(radius)")
+
+        delay(0.2) {
+            log("Requesting State for region \(region) lat \(lat) lng \(lng)")
+            manager.requestStateForRegion(region)
+        }
     }
 
     func locationManager(manager: CLLocationManager, didDetermineState state: CLRegionState, forRegion region: CLRegion) {
         log("State for region " + region.identifier)
+        if state == CLRegionState.Inside {
+            log("In \(region.identifier)")
+            handleTransition(region, transitionType: 1)
+        }
+        else if state == CLRegionState.Outside {
+            log("Not in \(region.identifier)")
+//            handleTransition(region, transitionType: 2)
+        }
+        else {
+            log("Not determined")
+        }
     }
 
     func locationManager(manager: CLLocationManager, monitoringDidFailForRegion region: CLRegion?, withError error: NSError) {
@@ -427,7 +452,7 @@ class GeoNotificationStore {
     func add(geoNotification: JSON) {
         let id = geoNotification["id"].stringValue
         let err = SD.executeChange("INSERT INTO GeoNotifications (Id, Data) VALUES(?, ?)",
-            withArgs: [id, geoNotification.description])
+                                   withArgs: [id, geoNotification.description])
 
         if err != nil {
             log("Error while adding \(id) GeoNotification: \(err)")
@@ -437,7 +462,7 @@ class GeoNotificationStore {
     func update(geoNotification: JSON) {
         let id = geoNotification["id"].stringValue
         let err = SD.executeChange("UPDATE GeoNotifications SET Data = ? WHERE Id = ?",
-            withArgs: [geoNotification.description, id])
+                                   withArgs: [geoNotification.description, id])
 
         if err != nil {
             log("Error while adding \(id) GeoNotification: \(err)")
