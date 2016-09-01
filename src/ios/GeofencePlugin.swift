@@ -346,10 +346,10 @@ class GeoNotificationManager : NSObject, CLLocationManagerDelegate {
     //     handleTransition(region, transitionType: 1)
     // }
 
-    // func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
-    //     log("Exiting region \(region.identifier)")
-    //     handleTransition(region, transitionType: 2)
-    // }
+     func locationManager(manager: CLLocationManager, didExitRegion region: CLRegion) {
+         log("Exiting region \(region.identifier)")
+         handleTransition(region, transitionType: 2)
+     }
 
     func locationManager(manager: CLLocationManager, didStartMonitoringForRegion region: CLRegion) {
         let lat = (region as! CLCircularRegion).center.latitude
